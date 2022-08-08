@@ -41,6 +41,8 @@ const NewPost = () => {
         } catch (error) {
             console.log(error);
         }
+        setTitle('');
+        setContent('');
         setPostStatus('Create Post');
         setOpen(true);
     };

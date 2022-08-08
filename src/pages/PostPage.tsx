@@ -81,6 +81,7 @@ const PostPage = () => {
         } catch (error) {
             console.log(error);
         }
+        setComment('');
         setCommentStatus('Post');
     };
 
