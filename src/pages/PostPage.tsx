@@ -2,31 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import LoadingSpinner from '../shared/components/LoadingSpinner';
 
-interface Post {
-    userId: number;
-    id: number;
-    title: string;
-    body: string;
-}
-
-interface Author {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-}
-
-interface Comment {
-    id?: number;
-    name: string;
-    email: string;
-    body: string;
-}
-
-interface Photo {
-    id: number;
-    url: string;
-}
+import { Post, Author, Photo, Comment } from '../shared/interface/Interface';
 
 const PostPage = () => {
     //get post id from route

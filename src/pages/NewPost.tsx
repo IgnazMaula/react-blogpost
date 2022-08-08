@@ -2,13 +2,7 @@ import React, { useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import Modal from '../shared/components/Modal';
 import { PostContext } from '../shared/context/PostContext';
-
-interface Post {
-    id: number;
-    userId: number;
-    title: string;
-    body: string;
-}
+import { Post } from '../shared/interface/Interface';
 
 const NewPost = () => {
     const context = useContext(PostContext);

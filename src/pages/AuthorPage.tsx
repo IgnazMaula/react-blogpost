@@ -1,64 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import LoadingSpinner from '../shared/components/LoadingSpinner';
-
-interface Post {
-    userId: number;
-    id: number;
-    title: string;
-    body: string;
-}
-
-interface Author {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-    address: Address;
-    phone: string;
-    website: string;
-    company: Company;
-}
-
-interface Address {
-    street: string;
-    suite: string;
-    city: string;
-    zipcode: string;
-    geo: Geo;
-}
-
-interface Company {
-    name: string;
-    catchPhrase: string;
-    bs: string;
-}
-
-interface Geo {
-    lat: string;
-    lng: string;
-}
-
-interface Comment {
-    id: number;
-    email: string;
-    body: string;
-}
-
-interface Photo {
-    id: number;
-    url: string;
-}
+import { Author, Photo, Address, Company, Geo } from '../shared/interface/Interface';
 
 const AuthorPage = () => {
     //get post id from route
     const authorId = useParams().aid;
-
     const navigate = useNavigate();
 
     const [author, setAuthor] = useState<Author>();
     const [photos, setPhotos] = useState<Photo[]>([]);
-
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

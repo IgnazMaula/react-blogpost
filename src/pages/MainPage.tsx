@@ -2,24 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
 import LoadingSpinner from '../shared/components/LoadingSpinner';
 import { PostContext } from '../shared/context/PostContext';
-
-interface Post {
-    userId: number;
-    id: number;
-    title: string;
-    body: string;
-}
-interface Author {
-    id: number;
-    name: string;
-    username: string;
-    email: string;
-}
-
-interface Photo {
-    id: number;
-    url: string;
-}
+import { Post, Author, Photo } from '../shared/interface/Interface';
 
 const MainPage = () => {
     const context = useContext(PostContext);
