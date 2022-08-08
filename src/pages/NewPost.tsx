@@ -14,6 +14,7 @@ const NewPost = () => {
     const [content, setContent] = useState('');
     const [postStatus, setPostStatus] = useState('Create Post');
     const [open, setOpen] = useState(false);
+    const [error, setError] = useState(null);
 
     let newPost: Post;
     // Submit new post
@@ -38,14 +39,22 @@ const NewPost = () => {
                 setPosts([newPost, ...posts]);
                 context.postList = [newPost, ...posts];
             }
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            setError(error);
         }
         setTitle('');
         setContent('');
         setPostStatus('Create Post');
         setOpen(true);
     };
+
+    if (error) {
+        return (
+            <div className='text-center p-24'>
+                <div>{`There is a problem fetching the data - ${error}`}</div>
+            </div>
+        );
+    }
 
     return (
         <>

@@ -17,31 +17,59 @@ const PostPage = () => {
     const [commentStatus, setCommentStatus] = useState('Post');
 
     const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
 
     let newComment: Comment;
 
     useEffect(() => {
+        var userId = '';
         const getData = async () => {
             try {
                 //fetch post data
-                const responsePost = await fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`);
-                const responseDataPost = await responsePost.json();
+                const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`);
+                if (!response.ok) {
+                    throw new Error(`This is an HTTP error: The status is ${response.status}`);
+                }
+                const responseDataPost = await response.json();
                 setPost(responseDataPost);
-                //fetch author data
-                const responseAuthor = await fetch(`https://jsonplaceholder.typicode.com/users/${responseDataPost.userId}`);
-                const responseDataAuthor = await responseAuthor.json();
-                setAuthor(responseDataAuthor);
-                //fetch comment data
-                const responseComment = await fetch(`https://jsonplaceholder.typicode.com/posts/${postId}/comments`);
-                const responseDataComment = await responseComment.json();
-                setComments(responseDataComment);
-                //fetch photo data
-                const responsePhoto = await fetch('https://jsonplaceholder.typicode.com/photos');
-                const responseDataPhoto = await responsePhoto.json();
-                setPhotos(responseDataPhoto);
-            } catch (error) {
-                console.log(error);
+                userId = responseDataPost.userId;
+            } catch (err: any) {
+                setError(err.message);
             }
+            try {
+                //fetch author data
+                const response = await fetch(`https://jsonplaceholder.typicode.com/users/${userId}`);
+                if (!response.ok) {
+                    throw new Error(`This is an HTTP error: The status is ${response.status}`);
+                }
+                const responseDataAuthor = await response.json();
+                setAuthor(responseDataAuthor);
+            } catch (err: any) {
+                setError(err.message);
+            }
+            try {
+                //fetch comment data
+                const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${postId}/comments`);
+                if (!response.ok) {
+                    throw new Error(`This is an HTTP error: The status is ${response.status}`);
+                }
+                const responseDataComment = await response.json();
+                setComments(responseDataComment);
+            } catch (err: any) {
+                setError(err.message);
+            }
+            try {
+                //fetch photo data
+                const response = await fetch('https://jsonplaceholder.typicode.com/photos');
+                if (!response.ok) {
+                    throw new Error(`This is an HTTP error: The status is ${response.status}`);
+                }
+                const responseDataPhoto = await response.json();
+                setPhotos(responseDataPhoto);
+            } catch (err: any) {
+                setError(err.message);
+            }
+
             setLoading(false);
         };
         getData();
@@ -78,12 +106,20 @@ const PostPage = () => {
             if (newComment !== undefined) {
                 setComments([newComment, ...comments]);
             }
-        } catch (error) {
-            console.log(error);
+        } catch (error: any) {
+            setError(error.message);
         }
         setComment('');
         setCommentStatus('Post');
     };
+
+    if (error) {
+        return (
+            <div className='text-center p-24'>
+                <div>{`There is a problem fetching the data - ${error}`}</div>
+            </div>
+        );
+    }
 
     return (
         <>
