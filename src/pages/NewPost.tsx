@@ -1,5 +1,7 @@
 import React, { useContext, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { setPosts } from '../redux/actions/postAction';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import Modal from '../shared/components/Modal';
 import { PostContext } from '../shared/context/PostContext';
 import { Post } from '../shared/interface/Interface';
@@ -9,7 +11,10 @@ const NewPost = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    const [posts, setPosts] = useState<Post[]>([...context.postList]);
+    const posts: Post[] = useAppSelector((state) => state.allPost.posts);
+    const dispatch = useAppDispatch();
+
+    //const [posts, setPosts] = useState<Post[]>([...context.postList]);
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [postStatus, setPostStatus] = useState('Create Post');
@@ -36,8 +41,7 @@ const NewPost = () => {
                 throw new Error(responseData.message);
             }
             if (newPost !== undefined) {
-                setPosts([newPost, ...posts]);
-                context.postList = [newPost, ...posts];
+                dispatch(setPosts([newPost, ...posts]));
             }
         } catch (error: any) {
             setError(error);
