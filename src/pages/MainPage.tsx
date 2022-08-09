@@ -1,5 +1,9 @@
 import { useState, useEffect, useContext } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
+import { setPosts } from '../redux/actions/postAction';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
+import { RootState } from '../redux/store';
 import LoadingSpinner from '../shared/components/LoadingSpinner';
 import { PostContext } from '../shared/context/PostContext';
 import { Post, Author, Photo } from '../shared/interface/Interface';
@@ -7,7 +11,8 @@ import { Post, Author, Photo } from '../shared/interface/Interface';
 const MainPage = () => {
     const context = useContext(PostContext);
 
-    const [posts, setPosts] = useState<Post[]>(context.postList);
+    const posts: Post[] = useAppSelector((state) => state.allPost.posts);
+    const dispatch = useAppDispatch();
     const [authors, setAuthors] = useState<Author[]>([]);
     const [photos, setPhotos] = useState<Photo[]>([]);
     const [loading, setLoading] = useState(true);
@@ -17,14 +22,13 @@ const MainPage = () => {
         const getData = async () => {
             try {
                 //fetch post data
-                if (context.postList.length === 0) {
+                if (posts.length === 0) {
                     const responsePost = await fetch('https://jsonplaceholder.typicode.com/posts');
                     if (!responsePost.ok) {
                         throw new Error(`This is an HTTP error: The status is ${responsePost.status}`);
                     }
                     const responseDataPost = await responsePost.json();
-                    setPosts(responseDataPost);
-                    context.postList = responseDataPost;
+                    dispatch(setPosts(responseDataPost));
                 }
             } catch (error: any) {
                 setError(error.message);
@@ -116,7 +120,7 @@ const MainPage = () => {
                     Create New Post
                 </Link>
                 <div className='mt-12 max-w-lg mx-auto grid gap-5 lg:grid-cols-3 lg:max-w-none'>
-                    {context.postList.map((post) => (
+                    {posts.map((post) => (
                         <div key={post.title} className='flex flex-col rounded-lg shadow-lg overflow-hidden'>
                             <div className='flex-shrink-0'>
                                 <img className='h-48 w-full object-cover' src={getPhotoUrl(post.id)} alt='' />
